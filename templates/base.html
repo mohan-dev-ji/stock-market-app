@@ -2,13 +2,44 @@
 
 {% block styles %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
+    .stock-banner {
+        background-color: #000;
+        color: #fff;
+        padding: 50px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stock-name {
+        font-weight: bold;
+        margin: 0;
+        font-size: 50px;
+    }
+
+    .stock-price {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    @media (max-width: 768px) {
+        .stock-banner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stock-price {
+            margin-top: 10px;
+        }
+    }
     .search-container {
         display: flex;
         justify-content: left;
         margin-bottom: 20px;
         margin-top: 40px;
-        margin-left: 18px;
     }
     .search-container form {
         width: 25%;
@@ -20,12 +51,51 @@
     .search-container .btn {
         width: 25%;
     }
+    .home-icon {
+        font-size: 24px;
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+    .home-icon:hover {
+        color: #0056b3;
+    }
+    .card {
+        transition: box-shadow 0.3s ease-in-out;
+        height: 100%;
+    }
+
+    .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-text {
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    {% include 'search_bar.html' %}
+    <div class="search-container">
+        <a href="{{ url_for('index') }}" class="home-icon">
+            <i class="fas fa-home"></i>
+        </a>
+        <form method="POST" action="{{ url_for('index') }}">
+            <input type="text" class="form-control" name="stock_symbol" placeholder="Enter stock symbol">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
 </div>
 <div class="container">
     
