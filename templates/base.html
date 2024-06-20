@@ -1,0 +1,35 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .search-container {
+        display: flex;
+        justify-content: left;
+        margin-bottom: 20px;
+        margin-top: 40px;
+        margin-left: 18px;
+    }
+    .search-container form {
+        width: 25%;
+        display: flex;
+    }
+    .search-container .form-control {
+        flex-grow: 1;
+    }
+    .search-container .btn {
+        width: 25%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% include 'search_bar.html' %}
+</div>
+<div class="container">
+    
+    {% block page_content %}{% endblock %}
+</div>
+
+{% endblock %}
