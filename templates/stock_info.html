@@ -8,13 +8,13 @@
     
     <h1>{{ stock_data['longName'] }} ({{ stock_data['symbol'] }})</h1>
     <p>Industry: {{ stock_data['industry'] }}</p>
-    <p>6-month Change: {{ stock_data['52WeekChange'] }}%</p>
+    <p>6-month Change: {{ stock_data['52WeekChange'] }}%   is search</p>
 
     <div>
         <label for="time-period">Select Time Period:</label>
-        <select id="time-period" name="time-period">
+        <select id="time-period" onchange="updateStockGraph(this.value)">
             <option value="1d">1 Day</option>
-            <option value="1wk">1 Week</option>
+            <option value="5d">1 Week</option>
             <option value="1mo">1 Month</option>
             <option value="6mo" selected>6 Months</option>
             <option value="1y">1 Year</option>
@@ -23,7 +23,7 @@
     </div>
 
     <!-- code for displaying the graph-->
-    <div>{{ graph_div|safe }}</div>
+    <div id="stock-graph">{{ graph_div|safe }}</div>
     <p>Long Business Summary: {{ stock_data['longBusinessSummary'] }}%</p>
     
     <h2>Recent News</h2>
@@ -69,4 +69,58 @@
 {% endif %}
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        const stockHistory = JSON.parse(`{
+        "1d": {{ stock_history_1d|tojson }},
+        "5d": {{ stock_history_5d|tojson }},
+        "1mo": {{ stock_history_1mo|tojson }},
+        "6mo": {{ stock_history_6mo|tojson }},
+        "1y": {{ stock_history_1y|tojson }},
+        "max": {{ stock_history_max|tojson }}
+    }`);
+
+        function updateStockGraph(timePeriod) {
+            const stockSymbol = "{{ stock_data['symbol'] }}";
+            let stockData = stockHistory[timePeriod];
+
+            if (stockData.length === 0 && timePeriod === '1d') {
+                stockData = stockHistory['5d'];
+                console.log('Falling back to 5-day data');
+            }
+
+            if (stockData.length === 0) {
+                document.getElementById('stock-graph').innerHTML = '<p>No data available for the selected time period.</p>';
+                return;
+            }
+
+
+            const dates = stockData.map(data => new Date(data.Date));
+            const closingPrices = stockData.map(data => data.Close);
+
+            const trace = {
+                x: dates,
+                y: closingPrices,
+                mode: 'lines'
+            };
+
+            const layout = {
+                title: `${stockSymbol} Stock Price (${timePeriod})`,
+                xaxis: {
+                    title: 'Date'
+                },
+                yaxis: {
+                    title: 'Price (USD)'
+                }
+            };
+
+            const data = [trace];
+
+            Plotly.newPlot('stock-graph', data, layout);
+        }
+    </script>
 {% endblock %}
