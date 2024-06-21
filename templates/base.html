@@ -135,12 +135,73 @@
     opacity: 1 !important;
     display: block !important;
     }
+
+    .footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid #e7e7e7;
+    /* margin-left: 10px; */
+    }
+
+    .footer h5 {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .footer ul {
+        padding-left: 0;
+    }
+
+    .footer ul li {
+        margin-bottom: 0px;
+    }
+
+    .footer a {
+        color: #6c757d;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        color: #007bff;
+        text-decoration: underline;
+    }
+
+    .footer .fab {
+        margin-right: 0px;
+    }
+
+    .footer-content ul {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+
+    .footer-content {
+        display: flex;
+        align-items: stretch;
+        }
+
+        .footer-content > div {
+        display: flex;
+        flex-direction: column;
+        }
+
+        .footer-content h5 {
+        margin-bottom: 15px;
+        }
+    /* .footer hr {
+        margin: 20px 0;
+    } */
 </style>
 {% endblock %}
 
 {% block content %}
 
-    
+<body class="d-flex flex-column min-vh-100">  
 <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -165,10 +226,38 @@
         </form>
     </div>
 </div>
-<div class="container">
+
     
     {% block page_content %}{% endblock %}
-</div>
+    <footer class="footer mt-auto py-3 bg-light ">
+        <div class="container">
+          <div class="row mt-5 footer-content">
+            <div class="col-md-4">
+              <h5>Stock Tracker</h5>
+            </div>
+            <div class="col-md-4">
+              
+              <ul class="list-unstyled">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              
+              <ul class="list-unstyled">
+                <li><a href="https://github.com/mohan-dev-ji" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+              </ul>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p class="text-muted">&copy; 2024 Stock Tracker. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+</body>
+
 
 {% endblock %}
 
